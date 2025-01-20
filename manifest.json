@@ -1,1 +1,29 @@
-
+{
+    "manifest_version": 3,
+    "name": "Summary of discussions in Prog",
+    "version": "1.0",
+    "description": "Summarizes discussions in Prog using AI",
+    "permissions": [
+        "downloads"
+    ],
+    "host_permissions": [
+        "https://www.prog.co.il/threads/*"
+    ],
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": "icon.png"
+    },
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "https://www.prog.co.il/threads/*"
+            ],
+            "js": [
+                "content.js"
+            ]
+        }
+    ]
+}
