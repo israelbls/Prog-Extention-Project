@@ -4,17 +4,21 @@
     "version": "1.0",
     "description": "Summarizes discussions in Prog using AI",
     "permissions": [
+        "scripting",
+        "activeTab",
         "downloads"
+    ],
+    "files": [
+        "scripts/content.js"
     ],
     "host_permissions": [
         "https://www.prog.co.il/threads/*"
     ],
     "action": {
-        "default_popup": "popup.html",
-        "default_icon": "icon.png"
+        "default_popup": "popup.html"
     },
     "background": {
-        "service_worker": "background.js"
+        "service_worker": "scripts/background.js"
     },
     "content_scripts": [
         {
@@ -22,7 +26,7 @@
                 "https://www.prog.co.il/threads/*"
             ],
             "js": [
-                "content.js"
+                "scripts/content.js"
             ]
         }
     ]
