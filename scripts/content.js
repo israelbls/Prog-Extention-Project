@@ -124,4 +124,44 @@ function Auoter(name, level) {
     this.level = level;
 }
 
-console.log(getPostsFromThread(window.location.href));
+function getThreadId(threadUrl) {
+    return threadUrl.split('threads/')[1].split('.')[1].split('_')[0];
+}
+
+
+async function downloadPostsAsJson(threadUrl) {
+    try {
+        // Call the function to get all posts from the thread
+        const posts = await getPostsFromThread(threadUrl);
+
+        // Convert posts array to JSON string
+        const postsJson = JSON.stringify(posts, null, 2);
+
+        // Create a Blob object from the JSON string
+        const blob = new Blob([postsJson], { type: 'application/json' });
+
+        // Create a URL for the Blob object
+        const url = URL.createObjectURL(blob);
+
+        // Create an anchor element to trigger the download
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = getThreadId(threadUrl) + '.json'; // The name of the downloaded file
+        a.style.display = 'none';
+
+        // Append the anchor to the body, trigger the download, and then remove it
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        // Revoke the object URL to release memory
+        URL.revokeObjectURL(url);
+
+        console.log('File downloaded successfully!');
+    } catch (error) {
+        console.error('Error while downloading posts:', error);
+    }
+}
+
+// Call the function to test (use the current thread URL as input)
+downloadPostsAsJson(window.location.href);
