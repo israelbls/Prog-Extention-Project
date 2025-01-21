@@ -15,14 +15,14 @@ async function getPostsFromThread(threadUrl) {
 
     while (true) {
         let nextPageContent = await getNextPageContent(currentPageUrl);
+        
+        console.log(`page-${pageNumber} done`);
+        console.log(posts);
 
         // if the next page content is null then break the loop
         if (nextPageContent === null) {
             break;
         }
-
-        console.log(`page-${pageNumber} done`);
-        console.log(posts);
 
         pageNumber++;
         currentPageUrl = nextPageContent[1]; // set the current page url to the next page url
