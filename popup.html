@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="he">
 
 <head>
     <meta charset="UTF-8">
@@ -15,12 +15,29 @@
             font-size: 14px;
             cursor: pointer;
         }
+
+        #progressBar {
+            width: 0;
+            height: 20px;
+            background-color: #76c7c0;
+            color: white;
+            text-align: center;
+            line-height: 20px;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
     </style>
 </head>
 
 <body>
     <h1>Export Forum Thread</h1>
     <button id="exportButton">Export to JSON</button>
+
+    <div id="progressContainer"
+        style="width: 100%; background-color: #e0e0e0; border-radius: 10px; overflow: hidden; margin-top: 20px;">
+        <div id="progressBar">0 / 0 pages analyzed</div>
+    </div>
+
     <script src="scripts/popup.js"></script>
 </body>
 

@@ -1,3 +1,25 @@
+function getLastPageNumber() {
+    const pages = document.querySelectorAll('.pageNav-page');
+    let lastPage = 1;
+
+    pages.forEach((page) => {
+        const pageNumber = parseInt(page.textContent.trim());
+        if (!isNaN(pageNumber) && pageNumber > lastPage) {
+            lastPage = pageNumber;
+        }
+    });
+
+    return lastPage;
+}
+
+function notifyPageAnalyzed(pageNumber, totalPages) {
+    chrome.runtime.sendMessage({
+        type: "pageAnalyzed",
+        currentPage: pageNumber,
+        totalPages: totalPages
+    });
+}
+
 async function getPostsFromThread(threadUrl) {
     let posts = [];// an array of all posts in the thread
 
@@ -11,13 +33,14 @@ async function getPostsFromThread(threadUrl) {
     let html = await response.text();
     let parser = new DOMParser();
     let document = parser.parseFromString(html, 'text/html');
-    posts.push({pageNumber : `page-${pageNumber}` , posts : getPostsFromPage(document)});
+    posts.push({ pageNumber: `page-${pageNumber}`, posts: getPostsFromPage(document) });
 
     while (true) {
         let nextPageContent = await getNextPageContent(currentPageUrl);
-        
+
         console.log(`page-${pageNumber} done`);
         console.log(posts);
+        notifyPageAnalyzed(pageNumber, lastPageNumber);
 
         // if the next page content is null then break the loop
         if (nextPageContent === null) {
@@ -27,7 +50,7 @@ async function getPostsFromThread(threadUrl) {
         pageNumber++;
         currentPageUrl = nextPageContent[1]; // set the current page url to the next page url
         document = nextPageContent[0]; // set the current page document to the next page document
-        posts.push({pageNumber : `page-${pageNumber}` , posts : getPostsFromPage(document)});
+        posts.push({ pageNumber: `page-${pageNumber}`, posts: getPostsFromPage(document) });
     }
 
     return posts;
@@ -124,6 +147,7 @@ function Auoter(name, level) {
     this.level = level;
 }
 
+
 function getThreadId(threadUrl) {
     return threadUrl.split('threads/')[1].split('.')[1].split('_')[0];
 }
@@ -165,3 +189,6 @@ async function downloadPostsAsJson(threadUrl) {
 
 // Call the function to test (use the current thread URL as input)
 downloadPostsAsJson(window.location.href);
+
+const lastPageNumber = getLastPageNumber();
+chrome.runtime.sendMessage({ type: "totalPages", totalPages: lastPageNumber });
