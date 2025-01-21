@@ -2,14 +2,12 @@ async function getPostsFromThread(threadUrl) {
     let posts = [];// an array of all posts in the thread
 
 
-    let currentPageUrl = threadUrl; // the url of the current page
-
-    let firstPageThreadURL = threadUrl.split('/page-')[0] + "/"; // the url of the first page of the thread
+    let currentPageUrl = threadUrl.split('/page-')[0] + "/"; // the url of the first page of the thread
 
     let pageNumber = 1; // the number of the current page
 
     // fetch the first page content
-    let response = await fetch(firstPageThreadURL);
+    let response = await fetch(currentPageUrl);
     let html = await response.text();
     let parser = new DOMParser();
     let document = parser.parseFromString(html, 'text/html');
@@ -22,6 +20,9 @@ async function getPostsFromThread(threadUrl) {
         if (nextPageContent === null) {
             break;
         }
+
+        console.log(`page-${pageNumber} done`);
+        console.log(posts);
 
         pageNumber++;
         currentPageUrl = nextPageContent[1]; // set the current page url to the next page url
@@ -42,11 +43,13 @@ async function getNextPageContent(currentPageUrl) {
     }
 
     // get the next page number
-    let nextPage = parseInt(currentPage[currentPage.length - 1]) + 1;
+    let nextPage = parseInt(currentPage.split("-").pop()) + 1;
     const nextPageUrl = currentPageUrl.replace(currentPage, `page-${nextPage}`);
 
     // fetch the next page content
     const response = await fetch(nextPageUrl);
+
+    console.log(response);
 
     // if the response is ok and not redirected
     if (response.status === 200 && response.redirected === false) {
@@ -59,11 +62,11 @@ async function getNextPageContent(currentPageUrl) {
     }
 }
 
-function getPostsFromPage() {
+function getPostsFromPage(doc) {
     let posts = []; // an array of all posts in the page
 
     // get all posts elements in the page
-    let postsElements = document.querySelectorAll('article[class*="message--post"]');
+    let postsElements = doc.querySelectorAll('article[class*="message--post"]');
 
     postsElements.forEach((postElement) => {
         // get the auoter name and level
@@ -120,3 +123,5 @@ function Auoter(name, level) {
     this.name = name;
     this.level = level;
 }
+
+console.log(getPostsFromThread(window.location.href));
