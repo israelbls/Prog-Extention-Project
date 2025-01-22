@@ -41,6 +41,7 @@ async function getPostsFromThread(threadUrl) {
     let document = parser.parseFromString(html, 'text/html');
     posts.push({ pageNumber: `page-${pageNumber}`, posts: getPostsFromPage(document) });
 
+<<<<<<< HEAD
     let label = document.querySelectorAll(".label.label--primary");
     if (label.length > 0) {
         label = label[0].textContent.trim();
@@ -55,6 +56,8 @@ async function getPostsFromThread(threadUrl) {
         title = "לא ידוע";
     }
 
+=======
+>>>>>>> b88eb8f (fixed bugs and changed colors)
     const lastPageNumber = getLastPageNumber();
 
     while (true) {
@@ -226,5 +229,9 @@ async function downloadPostsAsJson(threadUrl) {
 // Call the function to test (use the current thread URL as input)
 downloadPostsAsJson(window.location.href);
 
+<<<<<<< HEAD
 
 chrome.runtime.sendMessage({ type: "totalPages", totalPages: getLastPageNumber() });
+=======
+chrome.runtime.sendMessage({ type: "totalPages", totalPages: getLastPageNumber()});
+>>>>>>> b88eb8f (fixed bugs and changed colors)
