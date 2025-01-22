@@ -35,6 +35,8 @@ async function getPostsFromThread(threadUrl) {
     let document = parser.parseFromString(html, 'text/html');
     posts.push({ pageNumber: `page-${pageNumber}`, posts: getPostsFromPage(document) });
 
+    const lastPageNumber = getLastPageNumber();
+
     while (true) {
         let nextPageContent = await getNextPageContent(currentPageUrl);
 
@@ -93,7 +95,7 @@ function getPostsFromPage(doc) {
 
     postsElements.forEach((postElement) => {
         // get the auoter name and level
-        let auoterName = postElement.querySelector('.message-name a span').textContent;
+        let auoterName = postElement.querySelector('.message-name span').textContent;
         let auoterLevel = postElement.querySelector('h5[class*="userTitle"]').textContent;
 
         // create an auoter object with the data
@@ -149,7 +151,7 @@ function Auoter(name, level) {
 
 
 function getThreadId(threadUrl) {
-    return threadUrl.split('threads/')[1].split('.')[1].split('_')[0];
+    return threadUrl.split('threads/')[1].split('.')[1].split("/")[0];
 }
 
 
@@ -190,5 +192,4 @@ async function downloadPostsAsJson(threadUrl) {
 // Call the function to test (use the current thread URL as input)
 downloadPostsAsJson(window.location.href);
 
-const lastPageNumber = getLastPageNumber();
-chrome.runtime.sendMessage({ type: "totalPages", totalPages: lastPageNumber });
+chrome.runtime.sendMessage({ type: "totalPages", totalPages: getLastPageNumber()});
