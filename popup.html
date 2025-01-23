@@ -5,38 +5,98 @@
     <meta charset="UTF-8">
     <title>Forum Export</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@100..900&display=swap');
+
+        :root {
+            --primary-color: #a4d200;
+            --secondary-color: #76c7c0;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: Heebo, sans-serif;
             margin: 20px;
+            width: 250px;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+            color: var(--primary-color);
         }
 
         button {
             padding: 10px;
             font-size: 14px;
             cursor: pointer;
+            /* background-image: url("icons/icon16.png"); */
+            /* background-repeat: no-repeat;     */
+            background-position: center;
+            background-color: var(--primary-color);
+
+            color: white;
+            border: none;
+            border-radius: 5px;
+            background-size: cover;
+        }
+
+        button:disabled {
+            background-color: #e0e0e0;
+            cursor: not-allowed;
+        }
+
+        #progressContainer {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 20px;
         }
 
         #progressBar {
             width: 0;
             height: 20px;
-            background-color: #76c7c0;
-            color: white;
+            background-color: var(--primary-color);
+            color: black;
             text-align: center;
             line-height: 20px;
             border-radius: 10px;
             transition: width 0.5s ease;
+            white-space: nowrap;
+            overflow: visible;
+        }
+
+        #exportButtonContainer {
+            text-align: center;
+        }
+
+        #downloadMessage {
+            margin-top: 20px;
+            text-align: center;
+            font-weight: bold;
         }
     </style>
 </head>
 
-<body>
-    <h1>Export Forum Thread</h1>
-    <button id="exportButton">Export to JSON</button>
+<body dir="rtl">
+    <h1>ProGist</h1>
+    <p>התוסף ProGist מספק סיכום יעיל של דיונים בפורום בלחיצת כפתור. הוא חוסך זמן ומסנן תוכן לא רלוונטי, כך
+        שתוכלו להעלות את הסיכום ל-AI ולקבל תובנות מרוכזות בקלות.</p>
 
-    <div id="progressContainer"
-        style="width: 100%; background-color: #e0e0e0; border-radius: 10px; overflow: hidden; margin-top: 20px;">
-        <div id="progressBar">0 / 0 pages analyzed</div>
+    <div id="exportButtonContainer">
+
+        <button id="exportButton">
+            <h2>הורד אשכול זה</h2>
+        </button>
     </div>
+
+
+    <div id="progressContainer">
+        <div id="progressBar"></div>
+    </div>
+    <a href="https://chatgpt.com/?prompt=%D7%A1%D7%9B%D7%9D+%D7%90%D7%AA+%D7%94%D7%93%D7%99%D7%95%D7%9F+%D7%91%D7%A7%D7%95%D7%91%D7%A5+%D7%94%D7%9E%D7%A6%D7%95%D7%A8%D7%A3"
+        id="downloadMessage"></a>
 
     <script src="scripts/popup.js"></script>
 </body>

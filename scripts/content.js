@@ -8,11 +8,17 @@ function getLastPageNumber() {
             lastPage = pageNumber;
         }
     });
+    chrome.storage.local.set({ totalPages: lastPage }, () => {
+        console.log(`Total pages saved: ${lastPage}`);
+    });
 
     return lastPage;
 }
 
 function notifyPageAnalyzed(pageNumber, totalPages) {
+    chrome.storage.local.set({ currentPage: pageNumber, totalPages: totalPages }, () => {
+        console.log(`Progress saved: ${pageNumber}/${totalPages}`);
+    });
     chrome.runtime.sendMessage({
         type: "pageAnalyzed",
         currentPage: pageNumber,
@@ -35,6 +41,7 @@ async function getPostsFromThread(threadUrl) {
     let document = parser.parseFromString(html, 'text/html');
     posts.push({ pageNumber: `page-${pageNumber}`, posts: getPostsFromPage(document) });
 
+    const lastPageNumber = getLastPageNumber();
     while (true) {
         let nextPageContent = await getNextPageContent(currentPageUrl);
 
@@ -93,7 +100,7 @@ function getPostsFromPage(doc) {
 
     postsElements.forEach((postElement) => {
         // get the auoter name and level
-        let auoterName = postElement.querySelector('.message-name a span').textContent;
+        let auoterName = postElement.querySelector('.message-name span').textContent;
         let auoterLevel = postElement.querySelector('h5[class*="userTitle"]').textContent;
 
         // create an auoter object with the data
@@ -101,6 +108,9 @@ function getPostsFromPage(doc) {
 
         // get the post content
         let postContent = postElement.querySelector('.bbWrapper');
+        if (postContent === null) {
+            return;
+        }
 
         // get all qoutes in the post
         let qoutes = [];
@@ -155,6 +165,10 @@ function getThreadId(threadUrl) {
 
 async function downloadPostsAsJson(threadUrl) {
     try {
+
+        // Save the url of the thread
+        chrome.storage.local.set({ threadUrl });
+
         // Call the function to get all posts from the thread
         const posts = await getPostsFromThread(threadUrl);
 
@@ -182,6 +196,7 @@ async function downloadPostsAsJson(threadUrl) {
         URL.revokeObjectURL(url);
 
         console.log('File downloaded successfully!');
+        chrome.runtime.sendMessage({ type: "downloadComplete" });
     } catch (error) {
         console.error('Error while downloading posts:', error);
     }
@@ -190,5 +205,4 @@ async function downloadPostsAsJson(threadUrl) {
 // Call the function to test (use the current thread URL as input)
 downloadPostsAsJson(window.location.href);
 
-const lastPageNumber = getLastPageNumber();
-chrome.runtime.sendMessage({ type: "totalPages", totalPages: lastPageNumber });
+chrome.runtime.sendMessage({ type: "totalPages", totalPages: getLastPageNumber() });

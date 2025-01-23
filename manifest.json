@@ -1,9 +1,10 @@
 {
     "manifest_version": 3,
-    "name": "Summary of discussions in Prog",
+    "name": "ProGist",
     "version": "1.0",
     "description": "Summarizes discussions in Prog using AI",
     "permissions": [
+        "storage",
         "scripting",
         "activeTab",
         "downloads"
@@ -19,5 +20,10 @@
     },
     "background": {
         "service_worker": "scripts/background.js"
+    },
+    "icons": {
+        "16": "icons/icon-16.png",
+        "48": "icons/icon-48.png",
+        "128": "icons/icon-128.png"
     }
 }
