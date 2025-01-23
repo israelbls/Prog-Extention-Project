@@ -42,6 +42,7 @@ async function getPostsFromThread(threadUrl) {
     posts.push({ pageNumber: `page-${pageNumber}`, posts: getPostsFromPage(document) });
 
     const lastPageNumber = getLastPageNumber();
+
     while (true) {
         let nextPageContent = await getNextPageContent(currentPageUrl);
 
@@ -159,7 +160,7 @@ function Auoter(name, level) {
 
 
 function getThreadId(threadUrl) {
-    return threadUrl.split('threads/')[1].split('.')[1].split('_')[0];
+    return threadUrl.split('threads/')[1].split('.')[1].split("/")[0];
 }
 
 
@@ -205,4 +206,5 @@ async function downloadPostsAsJson(threadUrl) {
 // Call the function to test (use the current thread URL as input)
 downloadPostsAsJson(window.location.href);
 
-chrome.runtime.sendMessage({ type: "totalPages", totalPages: getLastPageNumber() });
+
+chrome.runtime.sendMessage({ type: "totalPages", totalPages: getLastPageNumber()});
