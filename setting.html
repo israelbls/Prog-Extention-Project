@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles/settings-style.css">
+  <title>הגדרות תוסף</title>
+</head>
+
+<body>
+  <div class="container">
+    <h1>הגדרות תוסף</h1>
+    <form id="settings-form">
+      <div>
+        <label for="language">שפה:</label>
+        <select id="language" name="language">
+          <option value="he" selected>עברית</option>
+          <option value="en">אנגלית</option>
+        </select>
+      </div>
+
+      <div id="post-weight-container">
+        <label for="post-weight">לתת משקל לפוסטים של:</label>
+        <div class="dropdown-checklist">
+          <button type="button" class="dropdown-toggle">בחר דרגות...</button>
+          <div class="dropdown-menu">
+            <label class="dropdown-item">
+              <input type="checkbox" name="post-weight" value="rank1">
+              <span>דרגה 1 - מתחילים</span>
+            </label>
+            <label class="dropdown-item">
+              <input type="checkbox" name="post-weight" value="rank2">
+              <span>דרגה 2 - מתקדמים</span>
+            </label>
+            <label class="dropdown-item">
+              <input type="checkbox" name="post-weight" value="rank3">
+              <span>דרגה 3 - מומחים</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+
+      <div>
+        <label>סטטיסטיקות:</label>
+        <div class="checkbox-group"></div>
+        <label for="total-posts">כמות הפוסטים</label>
+        <input type="checkbox" id="total-posts" name="stats" value="total-posts"><br>
+        <label for="top-users">עשרת המשתמשים המובילים</label>
+        <input type="checkbox" id="top-users" name="stats" value="top-users"><br>
+        <label for="longest-post">הפוסט הכי ארוך</label>
+        <input type="checkbox" id="longest-post" name="stats" value="longest-post">
+      </div>
+  </div>
+
+  <div id="notes-container">
+    <label for="notes">הערות מיוחדות:</label>
+    <textarea id="notes" name="notes" placeholder="כתוב כאן הערות מיוחדות..."></textarea>
+  </div>
+
+  <div>
+    <button type="button" id="save-button">שמור</button>
+  </div>
+  </form>
+  </div>
+</body>
+<script src="scripts/settings.js"></script>
+<script>
+  
+  
+</script>
+
+</html>
