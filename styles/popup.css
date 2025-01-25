@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@100..900&display=swap');
+
+:root {
+    --primary-color: #a4d200;
+    --secondary-color: #76c7c0;
+}
+
+body {
+    font-family: Heebo, sans-serif;
+    margin: 20px;
+    width: 250px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-align: center;
+    color: var(--primary-color);
+}
+
+#exportButton {
+    padding: 10px;
+    font-size: 14px;
+    cursor: pointer;
+
+    background-position: center;
+    background-color: var(--primary-color);
+
+    color: white;
+    border: none;
+    border-radius: 5px;
+    background-size: cover;
+}
+
+#exportButton:disabled {
+    background-color: #e0e0e0;
+    cursor: not-allowed;
+}
+
+#openSettingsButton {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+#progressContainer {
+    width: 100%;
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+#progressBar {
+    width: 0;
+    height: 20px;
+    background-color: var(--primary-color);
+    color: black;
+    text-align: center;
+    line-height: 20px;
+    border-radius: 10px;
+    transition: width 0.5s ease;
+    white-space: nowrap;
+    overflow: visible;
+}
+
+#exportButtonContainer {
+    text-align: center;
+}
+
+#downloadMessageContainer {
+    margin-top: 20px;
+    text-align: center;
+    font-weight: bold;
+}
