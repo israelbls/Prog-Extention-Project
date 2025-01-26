@@ -26,8 +26,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-
-document.getElementById("exportButton").addEventListener("click", () => {
+const exportButton = document.getElementById("exportButton");
+exportButton.addEventListener("click", () => {
+    exportButton.disabled = true;
+    exportButton.textContent = "מייצא...";
+    exportButton.style.color = "black";
     // שליחת הודעה לסקריפט התוכן
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         chrome.scripting.executeScript({
@@ -37,17 +40,18 @@ document.getElementById("exportButton").addEventListener("click", () => {
     });
 });
 
-// let totalPages = 0;
-// let currentPage = 0;
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.type === "totalPages") {
         totalPages = message.totalPages;
         chrome.storage.local.set({ totalPages });
+        showStatus(`מתחיל באנליזה של ${totalPages} עמודים...`);
     } else if (message.type === "pageAnalyzed") {
         currentPage = message.currentPage;
         updateProgressBar(currentPage, totalPages);
+        showStatus(`מנתח את עמוד ${currentPage}`);
     } else if (message.type === "downloadComplete") {
+        hideStatus();
         updateDownloadMessage();
     }
     sendResponse({ status: "received" });
@@ -79,33 +83,45 @@ function createPrompt() {
         return "https://chatgpt.com?prompt=סכם לי ביסודיות את הדיון בפורום אחרי קריאה ממעמיקה של הקובץ המצורף";
     }
     settings = JSON.parse(settings);
-    let prompt = `סכם לי ביסודיות את הדיון בפורום אחרי קריאה ממעמיקה של הקובץ המצורף\n\n`;
+    let prompt = `נא סכם בהרחבה את הדיון המתועד בקובץ המצורף. `;
     if (settings.language === "en") {
-        prompt += `שהסיכום יהיה בשפה האנגלית\n`;
+        prompt += ` הסיכום יהיה בשפה האנגלית. `;
     }
     const postWeight = settings.postWeight;
     if (postWeight.length > 0) {
-        prompt += `תן משקל לפוסטים של משתמשים:\n`;
+        prompt += ` תן משקל לפוסטים של משתמשים: `;
         postWeight.forEach(weight => {
-            prompt += `${weight.replace("rank", "דרגה ")}\n`;
+            prompt += `${weight.replace("rank", " דרגה ")}\n`;
         });
     }
     const stats = settings.stats;
     if (stats.length > 0) {
-        prompt += ` כלול סטטיסטיקות מפורטות על:\n`;
+        prompt += `לאחר הסיכום ובנוסף עליו, כלול גם סטטיסטיקות מפורטות על:\n `;
         if (stats.includes("total-posts")) {
-            prompt += `כמות הפוסטים\n`;
+            prompt += `כמות הפוסטים\n `;
         }
         if (stats.includes("top-users")) {
-            prompt += `עשרת המשתמשים הפעילים ביותר\n`;
+            prompt += `עשרת המשתמשים הפעילים ביותר\n `;
         }
         if (stats.includes("longest-post")) {
-            prompt += `הפוסט הארוך ביותר\n`;
+            prompt += `הפוסט הארוך ביותר\n `;
         }
     }
     const notes = settings.notes;
     if (notes) {
-        prompt += `הערות:\n${notes}`;
+        prompt += ` הערות:\n${notes}`;
     }
     return "https://chatgpt.com/?prompt=" + prompt;
+}
+
+//status functions
+function showStatus(text) {
+    const statusContainer = document.getElementById('statusContainer');
+    const statusText = document.getElementById('statusText');
+    statusText.textContent = text;
+    statusContainer.style.display = 'flex';
+}
+
+function hideStatus() {
+    document.getElementById('statusContainer').style.display = 'none';
 }

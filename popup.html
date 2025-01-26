@@ -17,16 +17,23 @@
     <p>התוסף ProGist מספק סיכום יעיל של דיונים בפורום בלחיצת כפתור. הוא חוסך זמן ומסנן תוכן לא רלוונטי, כך
         שתוכלו להעלות את הסיכום ל-AI ולקבל תובנות מרוכזות בקלות.</p>
 
-    <div id="exportButtonContainer">
+    <div class="card">
+        <div id="exportButtonContainer">
 
-        <button id="exportButton">
-            <h2>הורד אשכול זה</h2>
-        </button>
-    </div>
+            <button id="exportButton">
+                <h2>הורד אשכול זה</h2>
+            </button>
+        </div>
+
+        <div id="statusContainer">
+            <div class="loading-spinner"></div>
+            <span id="statusText"></span>
+        </div>
 
 
-    <div id="progressContainer">
-        <div id="progressBar"></div>
+        <div id="progressContainer">
+            <div id="progressBar"></div>
+        </div>
     </div>
     <div id="downloadMessageContainer" style="display: none;">
         <p>כדי לסכם את הדיון לחץ כדי לעבור לGPT והעלה את הקובץ האחרון שירד למחשב</p>

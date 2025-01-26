@@ -8,16 +8,14 @@ function getLastPageNumber() {
             lastPage = pageNumber;
         }
     });
-    chrome.storage.local.set({ totalPages: lastPage }, () => {
-        console.log(`Total pages saved: ${lastPage}`);
-    });
+    chrome.storage.local.set({ totalPages: lastPage }, () => { });
 
     return lastPage;
 }
 
 function notifyPageAnalyzed(pageNumber, totalPages) {
     chrome.storage.local.set({ currentPage: pageNumber, totalPages: totalPages }, () => {
-        console.log(`Progress saved: ${pageNumber}/${totalPages}`);
+
     });
     chrome.runtime.sendMessage({
         type: "pageAnalyzed",
@@ -45,9 +43,6 @@ async function getPostsFromThread(threadUrl) {
 
     while (true) {
         let nextPageContent = await getNextPageContent(currentPageUrl);
-
-        console.log(`page-${pageNumber} done`);
-        console.log(posts);
         notifyPageAnalyzed(pageNumber, lastPageNumber);
 
         // if the next page content is null then break the loop
@@ -80,7 +75,6 @@ async function getNextPageContent(currentPageUrl) {
     // fetch the next page content
     const response = await fetch(nextPageUrl);
 
-    console.log(response);
 
     // if the response is ok and not redirected
     if (response.status === 200 && response.redirected === false) {
@@ -207,4 +201,4 @@ async function downloadPostsAsJson(threadUrl) {
 downloadPostsAsJson(window.location.href);
 
 
-chrome.runtime.sendMessage({ type: "totalPages", totalPages: getLastPageNumber()});
+chrome.runtime.sendMessage({ type: "totalPages", totalPages: getLastPageNumber() });
