@@ -1,5 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@100..900&display=swap');
 
+@font-face {
+    font-family: 'usuziv2';
+    src: url("../fonts/usuziv2.ttf") format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 :root {
     --primary-color: #a4d200;
     --secondary-color: #76c7c0;
@@ -15,12 +22,26 @@ body {
     background-color: var(--background-color);
 }
 
+#header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#githubButton {
+    border: none;
+    background: none;
+}
+
 h1 {
     font-size: 24px;
     font-weight: 700;
     margin-bottom: 20px;
     text-align: center;
     color: var(--primary-color);
+    font-family: 'usuziv2';
 }
 
 .card {
@@ -51,17 +72,6 @@ h1 {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    /* padding: 10px;
-    font-size: 14px;
-    cursor: pointer;
-
-    background-position: center;
-    background-color: var(--primary-color);
-
-    color: white;
-    border: none;
-    border-radius: 5px;
-    background-size: cover; */
 }
 
 #exportButton:hover {
@@ -114,9 +124,9 @@ h1 {
     background-color: transparent;
     border: none;
     cursor: pointer;
-    position: absolute;
+    /* position: absolute;
     right: 10px;
-    top: 10px;
+    top: 10px; */
 }
 
 #progressContainer {
@@ -148,4 +158,10 @@ h1 {
     margin-top: 20px;
     text-align: center;
     font-weight: bold;
+}
+
+#downloadMessage {
+    font-size: 20px;
+    border: none;
+    background: none;
 }

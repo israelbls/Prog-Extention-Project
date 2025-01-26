@@ -53,6 +53,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     } else if (message.type === "downloadComplete") {
         hideStatus();
         updateDownloadMessage();
+        exportButton.disabled = false;
+        exportButton.innerHTML = "<h2>הורד אשכול זה</h2>";
+        exportButton.style.color = "white";
+
     }
     sendResponse({ status: "received" });
 });
@@ -125,3 +129,4 @@ function showStatus(text) {
 function hideStatus() {
     document.getElementById('statusContainer').style.display = 'none';
 }
+
