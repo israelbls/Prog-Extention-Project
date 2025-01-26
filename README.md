@@ -46,4 +46,4 @@
 
 **רישיון**: [MIT](LICENSE)  
 **גרסה נוכחית**: 1.0  
-**מפתח**: [שמך או קבוצת הפיתוח]
+**מפתחים**: [Israel Blasbalg](https://github.com/israelbls/) ו- [Naftaly](https://github.com/naftaly16)
