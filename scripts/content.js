@@ -222,3 +222,4 @@ downloadPostsAsJson(window.location.href);
 
 
 chrome.runtime.sendMessage({ type: "totalPages", totalPages: getLastPageNumber() });
+
