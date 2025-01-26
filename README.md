@@ -44,6 +44,6 @@
 
 ---
 
-**רישיון**: [MIT](https://choosealicense.com/licenses/mit/)  
+**רישיון**: [MIT](LICENSE)  
 **גרסה נוכחית**: 1.0  
 **מפתח**: [שמך או קבוצת הפיתוח]
