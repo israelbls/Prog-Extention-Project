@@ -8,14 +8,16 @@ function getLastPageNumber() {
             lastPage = pageNumber;
         }
     });
-    chrome.storage.local.set({ totalPages: lastPage }, () => { });
+    chrome.storage.local.set({ totalPages: lastPage }, () => {
+        console.log(`Total pages saved: ${lastPage}`);
+    });
 
     return lastPage;
 }
 
 function notifyPageAnalyzed(pageNumber, totalPages) {
     chrome.storage.local.set({ currentPage: pageNumber, totalPages: totalPages }, () => {
-
+        console.log(`Progress saved: ${pageNumber}/${totalPages}`);
     });
     chrome.runtime.sendMessage({
         type: "pageAnalyzed",
@@ -39,10 +41,27 @@ async function getPostsFromThread(threadUrl) {
     let document = parser.parseFromString(html, 'text/html');
     posts.push({ pageNumber: `page-${pageNumber}`, posts: getPostsFromPage(document) });
 
+    let label = document.querySelectorAll(".label.label--primary");
+    if (label.length > 0) {
+        label = label[0].textContent.trim();
+    } else {
+        label = "לא ידוע";
+    }
+
+    let title = document.querySelectorAll(".p-title-value");
+    if (title.length > 0) {
+        title = title[0].textContent.trim();
+    } else {
+        title = "לא ידוע";
+    }
+
     const lastPageNumber = getLastPageNumber();
 
     while (true) {
         let nextPageContent = await getNextPageContent(currentPageUrl);
+
+        console.log(`page-${pageNumber} done`);
+        console.log(posts);
         notifyPageAnalyzed(pageNumber, lastPageNumber);
 
         // if the next page content is null then break the loop
@@ -56,7 +75,7 @@ async function getPostsFromThread(threadUrl) {
         posts.push({ pageNumber: `page-${pageNumber}`, posts: getPostsFromPage(document) });
     }
 
-    return posts;
+    return [title, label, posts];
 }
 
 async function getNextPageContent(currentPageUrl) {
@@ -75,6 +94,7 @@ async function getNextPageContent(currentPageUrl) {
     // fetch the next page content
     const response = await fetch(nextPageUrl);
 
+    console.log(response);
 
     // if the response is ok and not redirected
     if (response.status === 200 && response.redirected === false) {
@@ -167,8 +187,14 @@ async function downloadPostsAsJson(threadUrl) {
         // Call the function to get all posts from the thread
         const posts = await getPostsFromThread(threadUrl);
 
+        const thread = {
+            title: posts[0],
+            label: posts[1],
+            posts: posts[2]
+        }
+
         // Convert posts array to JSON string
-        const postsJson = JSON.stringify(posts, null, 2);
+        const postsJson = JSON.stringify(thread, null, 2);
 
         // Create a Blob object from the JSON string
         const blob = new Blob([postsJson], { type: 'application/json' });

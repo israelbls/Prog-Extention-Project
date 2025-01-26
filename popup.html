@@ -8,11 +8,6 @@
 </head>
 
 <body dir="rtl">
-    <div id="settingsContainer">
-        <button id="openSettingsButton">
-            <img src="icons/settings.svg" width="15px" height="15px" alt="הגדרות">
-        </button>
-    </div>
     <h1>ProGist</h1>
     <p>התוסף ProGist מספק סיכום יעיל של דיונים בפורום בלחיצת כפתור. הוא חוסך זמן ומסנן תוכן לא רלוונטי, כך
         שתוכלו להעלות את הסיכום ל-AI ולקבל תובנות מרוכזות בקלות.</p>
@@ -20,33 +15,17 @@
     <div class="card">
         <div id="exportButtonContainer">
 
-            <button id="exportButton">
-                <h2>הורד אשכול זה</h2>
-            </button>
-        </div>
-
-        <div id="statusContainer">
-            <div class="loading-spinner"></div>
-            <span id="statusText"></span>
-        </div>
-
-
-        <div id="progressContainer">
-            <div id="progressBar"></div>
-        </div>
-    </div>
-    <div id="downloadMessageContainer" style="display: none;">
-        <p>כדי לסכם את הדיון לחץ כדי לעבור לGPT והעלה את הקובץ האחרון שירד למחשב</p>
-        <button id="downloadMessage">
-            <a id="downloadMessageLink"
-                href="https://chatgpt.com/?prompt=%D7%A1%D7%9B%D7%9D+%D7%90%D7%AA+%D7%94%D7%93%D7%99%D7%95%D7%9F+%D7%91%D7%A7%D7%95%D7%91%D7%A5+%D7%94%D7%9E%D7%A6%D7%95%D7%A8%D7%A3"
-                target="_blank">
-                <img src="icons/chat-gpt.png" width="15px" height="15px" alt="הצג סיכום">
-            </a>
+        <button id="exportButton">
+            <h2>הורד אשכול זה</h2>
         </button>
     </div>
 
 
+    <div id="progressContainer">
+        <div id="progressBar"></div>
+    </div>
+    <a href="https://chatgpt.com/?prompt=%D7%A1%D7%9B%D7%9D+%D7%90%D7%AA+%D7%94%D7%93%D7%99%D7%95%D7%9F+%D7%91%D7%A7%D7%95%D7%91%D7%A5+%D7%94%D7%9E%D7%A6%D7%95%D7%A8%D7%A3"
+        id="downloadMessage"></a>
 
     <script src="scripts/popup.js"></script>
 </body>
