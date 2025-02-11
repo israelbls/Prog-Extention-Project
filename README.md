@@ -20,7 +20,7 @@
    - גלוש לכתובת `chrome://extensions/`.
    - הפעל את "מצב מפתחים" בפינה הימנית העליונה.
    - לחץ על "טען הרחבה לא ארוזה" ובחר את תיקיית הפרויקט.
-   - 
+     
 ## ⚙️ טכנולוגיות בשימוש
 
 - שימוש ב-Manifest V3 להתאמה מלאה לסטנדרטים העדכניים של דפדפן Chrome.
@@ -31,7 +31,6 @@
 ## 📌 הערות חשובות
 
 - התוסף עובד אך ורק בכתובות של פורום פרוג בפורמט `https://www.prog.co.il/threads/*`.
-- יש להעלות את הקובץ למודל השפה תוך 5 דקות מרגע הורדתו.
 - נתוני המשתמשים נשמרים באופן מקומי בלבד ואינם נשלחים לשרתים חיצוניים.
 
 ## 🤝 תרומה
@@ -46,4 +45,4 @@
 
 **רישיון**: [MIT](LICENSE)  
 **גרסה נוכחית**: 1.0  
-**מפתח**: [שמך או קבוצת הפיתוח]
+**מפתחים**: [Israel Blasbalg](https://github.com/israelbls/) ו- [Naftaly](https://github.com/naftaly16)
