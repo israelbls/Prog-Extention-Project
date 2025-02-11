@@ -1,30 +1,51 @@
-//בודק האם מדובר בכתובת רלוונטית
 document.addEventListener("DOMContentLoaded", () => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-
         const url = tabs[0].url;
-        console.log(url);
+
         if (!url.includes("prog.co.il/threads")) {
-            console.log("not a relevant page");
             document.getElementById("exportButton").disabled = true;
+            return;
         }
 
-        chrome.storage.local.get(["threadUrl", "currentPage", "totalPages", "isDownloadComplete"], (result) => {
-            console.log(result);
-
+        // בדיקת המצב הנוכחי
+        chrome.storage.local.get(["threadUrl", "currentPage", "totalPages", "downloadStatus", "lastUpdate"], (result) => {
             if (result.threadUrl !== url) {
                 return;
             }
-            const { currentPage = 0, totalPages = 0, isDownloadComplete = false } = result;
-            if (totalPages > 0) {
-                updateProgressBar(currentPage, totalPages);
-            }
-            if (isDownloadComplete) {
-                updateDownloadMessage();
+
+            const { currentPage = 0, totalPages = 0, downloadStatus = null } = result;
+
+            // בדיקה האם ההורדה פעילה (לא ישנה מדי)
+            const isActive = result.lastUpdate && (Date.now() - result.lastUpdate < 30000); // 30 שניות
+
+            if (downloadStatus === 'downloading' && isActive) {
+                showDownloadingState();
+                if (totalPages > 0) {
+                    updateProgressBar(currentPage, totalPages);
+                }
+            } else if (downloadStatus === 'complete') {
+                showCompletedState();
             }
         });
     });
 });
+
+function showDownloadingState() {
+    const exportButton = document.getElementById("exportButton");
+    exportButton.disabled = true;
+    exportButton.innerHTML = "<h2>מייצא...</h2>";
+    exportButton.style.color = "black";
+    document.getElementById('statusContainer').style.display = 'flex';
+}
+
+function showCompletedState() {
+    const exportButton = document.getElementById("exportButton");
+    exportButton.disabled = false;
+    exportButton.innerHTML = "<h2>הורד אשכול זה</h2>";
+    exportButton.style.color = "white";
+    hideStatus();
+    updateDownloadMessage();
+}
 
 const exportButton = document.getElementById("exportButton");
 exportButton.addEventListener("click", () => {
@@ -41,6 +62,7 @@ exportButton.addEventListener("click", () => {
 });
 
 
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.type === "totalPages") {
         totalPages = message.totalPages;
@@ -51,12 +73,11 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         updateProgressBar(currentPage, totalPages);
         showStatus(`מנתח את עמוד ${currentPage}`);
     } else if (message.type === "downloadComplete") {
-        hideStatus();
-        updateDownloadMessage();
-        exportButton.disabled = false;
-        exportButton.innerHTML = "<h2>הורד אשכול זה</h2>";
-        exportButton.style.color = "white";
-
+        chrome.storage.local.set({
+            downloadStatus: 'complete',
+            lastUpdate: Date.now()
+        });
+        showCompletedState();
     }
     sendResponse({ status: "received" });
 });

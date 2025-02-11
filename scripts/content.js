@@ -14,9 +14,13 @@ function getLastPageNumber() {
 }
 
 function notifyPageAnalyzed(pageNumber, totalPages) {
-    chrome.storage.local.set({ currentPage: pageNumber, totalPages: totalPages }, () => {
-
+    chrome.storage.local.set({
+        currentPage: pageNumber,
+        totalPages: totalPages,
+        downloadStatus: 'downloading',
+        lastUpdate: Date.now()
     });
+
     chrome.runtime.sendMessage({
         type: "pageAnalyzed",
         currentPage: pageNumber,
@@ -25,6 +29,13 @@ function notifyPageAnalyzed(pageNumber, totalPages) {
 }
 
 async function getPostsFromThread(threadUrl) {
+
+    chrome.storage.local.set({
+        downloadStatus: 'downloading',
+        currentPage: 0,
+        lastUpdate: Date.now()
+    });
+
     let posts = [];// an array of all posts in the thread
 
 
@@ -69,6 +80,12 @@ async function getPostsFromThread(threadUrl) {
         document = nextPageContent[0]; // set the current page document to the next page document
         posts.push({ pageNumber: `page-${pageNumber}`, posts: getPostsFromPage(document) });
     }
+
+    chrome.storage.local.set({
+        downloadStatus: 'complete',
+        currentPage: pageNumber,
+        lastUpdate: Date.now()
+    });
 
     return [title, label, posts];
 }
