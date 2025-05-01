@@ -118,13 +118,23 @@ async function getNextPageContent(currentPageUrl) {
     }
 }
 
-function getPostsFromPage(doc) {
+
+
+   function getPostsFromPage(doc) {
     let posts = []; // an array of all posts in the page
 
     // get all posts elements in the page
     let postsElements = doc.querySelectorAll('article[class*="message--post"]');
 
     postsElements.forEach((postElement) => {
+        // Filter out advertisements
+        const isAd = postElement.querySelector('.samBannerUnit1') || 
+                     postElement.querySelector('.message-name span')?.textContent === 'פרוגבוט' || 
+                     postElement.querySelector('h5[class*="userTitle"]')?.textContent === 'תוכן שיווקי';
+        if (isAd) {
+            return; // Skip this post
+        }
+
         // get the auoter name and level
         let auoterName = postElement.querySelector('.message-name span').textContent;
         let auoterLevel = postElement.querySelector('h5[class*="userTitle"]').textContent;
@@ -138,7 +148,7 @@ function getPostsFromPage(doc) {
             return;
         }
 
-        // get all qoutes in the post
+        // get all quotes in the post
         let qoutes = [];
         if (postContent.querySelector('blockquote')) {
             const qoutePosts = postContent.querySelectorAll('blockquote');
@@ -146,11 +156,11 @@ function getPostsFromPage(doc) {
                 let qoutePostContent = qoutePost.querySelector('div[class*="bbCodeBlock-expandContent"]').textContent;
                 let qoutePostAuoterName = qoutePost.querySelector('a').textContent;
                 qoutes.push(new QoutePost(qoutePostAuoterName, qoutePostContent, null));
-                qoutePost.parentNode.removeChild(qoutePost); // remove the qoute from the post content
+                qoutePost.parentNode.removeChild(qoutePost); // remove the quote from the post content
             });
         }
 
-        let postText = postContent.textContent; // the text cntent of the post
+        let postText = postContent.textContent; // the text content of the post
 
         let postDate = postElement.querySelector('time').dateTime; // the date of the post
 
