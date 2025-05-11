@@ -122,24 +122,24 @@ function getPostsFromPage(doc) {
         }
 
         // get all qoutes in the post
-        let qoutes = [];
+        let quotes = [];
         if (postContent.querySelector('blockquote')) {
-            const qoutePosts = postContent.querySelectorAll('blockquote');
-            qoutePosts.forEach((qoutePost) => {
-                let qoutePostContent = qoutePost.querySelector('div[class*="bbCodeBlock-expandContent"]').textContent;
-                let qoutePostAuoterName = qoutePost.querySelector('a').textContent;
-                qoutes.push(new QoutePost(qoutePostAuoterName, qoutePostContent, null));
-                qoutePost.parentNode.removeChild(qoutePost); // remove the qoute from the post content
+            const quotePosts = postContent.querySelectorAll('blockquote');
+            quotePosts.forEach((quotePost) => {
+                let quotePostContent = quotePost.querySelector('div[class*="bbCodeBlock-expandContent"]').textContent;
+                let quotePostAuoterName = quotePost.querySelector('a').textContent;
+                quotes.push(new QuotePost(quotePostAuoterName, quotePostContent, null));
+                quotePost.parentNode.removeChild(quotePost); // remove the qoute from the post content
             });
         }
 
         let postText = postContent.textContent; // the text cntent of the post
 
-        let postDate = postElement.querySelector('time').dateTime; // the date of the post
+        let postDate = postElement.querySelector('time')?.dateTime; // the date of the post
 
-        let numbar = postElement.querySelectorAll('.message-attribution-opposite a')[1].textContent.trim(); // the number of the post
+        let number = postElement.querySelectorAll('.message-attribution-opposite a')[1].textContent.trim(); // the number of the post
 
-        let post = new Post(auoter, numbar, postText, postDate, qoutes); // create a post object with the data
+        let post = new Post(auoter, number, postText, postDate, quotes); // create a post object with the data
 
         posts.push(post);
     });
@@ -147,18 +147,18 @@ function getPostsFromPage(doc) {
     return posts;
 }
 
-function Post(auoter, numbar, content, date, QoutesPost) {
+function Post(auoter, numbar, content, date, QuotesPost) {
     this.auoter = auoter;
-    this.numbar = numbar;
+    this.number = numbar;
     this.content = content;
     this.date = date;
-    this.QoutePost = QoutesPost;
+    this.QuotePost = QuotesPost;
 }
 
-function QoutePost(auoterName, content, QoutePost) {
+function QuotePost(auoterName, content, QuotePost) {
     this.auoterName = auoterName;
     this.content = content;
-    this.QoutePost = QoutePost;
+    this.QuotePost = QuotePost;
 }
 
 function Auoter(name, level) {
